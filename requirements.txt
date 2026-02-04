@@ -1,0 +1,24 @@
+# Core
+python-dotenv
+requests
+gradio>=4.0
+
+# LLMs
+groq
+google-generativeai
+
+# Vector DB
+chromadb
+
+# LangChain / LangGraph
+langchain>=0.2
+langchain-community>=0.2
+langgraph>=0.1
+
+# Search & arXiv
+duckduckgo-search
+arxiv
+
+# Optional (nice-to-have)
+tqdm
+pypdf

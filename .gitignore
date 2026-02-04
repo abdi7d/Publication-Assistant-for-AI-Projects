@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+
+# Environment
+.env
+*.env
+
+# Logs and databases
+*.log
+chroma_db/
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+*.dockerignore
+
+# Misc
+*.swp
+*.bak
+*.tmp
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.env
+
+# Pytest cache
+.pytest_cache/
+
+# ChromaDB storage (if created)
+.chromadb/
