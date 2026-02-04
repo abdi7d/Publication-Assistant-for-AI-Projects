@@ -1,5 +1,7 @@
 # 📝 Publication Assistant for AI Projects
 
+<img src="image.png" alt=" Publication Assistant for AI Projects" >
+
 **A Multi-Agent System for Improving the Quality, Discoverability, and Credibility of AI/ML Repositories**
 
 ---
@@ -260,11 +262,6 @@ Contributions are welcome!
 Please open an issue or submit a pull request with clear documentation.
 
 ---
-
-## 📜 License
-
-MIT License — free to use, modify, and distribute.
----
 ### 📜 License
 
 Licensed under the [MIT license](LICENSE).
@@ -274,11 +271,6 @@ Licensed under the [MIT license](LICENSE).
 ### 📚 References
 
 1. **Ready Tensor** – [Agentic AI Developer Certification](https://app.readytensor.ai/certifications)
-2. **LangChain Documentation** – [Building RAG pipelines](https://www.langchain.com/docs/)
-3. **HuggingFace Embeddings** – [`all-MiniLM-L6-v2`](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
-4. **Chroma Vector Database** – [https://www.trychroma.com/](https://www.trychroma.com/)
-5. **Groq LLaMA / Gemini API** – LLM provider used for chatbot responses.
-6. **Ready Tensor Publications** – [The dataset/publications used in this project](https://drive.google.com/drive/folders/1HAqLXL2W-sh8hqoBb1iSauJ_0wZVRxB9)
 
 ---
 
