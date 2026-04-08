@@ -1,14 +1,14 @@
 {
-  "https-github-com-abdi7d-web-search-ai-agent": {
-    "repo_url": "https://github.com/abdi7d/Web-Search-AI-Agent",
-    "metadata": {
-      "title": "# \ud83d\udd0d SmartSearch AI: Tavily & Gemini Powered Web Research Agent"
-    }
-  },
   "https-github-com-abdi7d-ready-tensor-publication-explorer-rag-chatbot": {
     "repo_url": "https://github.com/abdi7d/Ready-Tensor-Publication-Explorer-RAG-Chatbot",
     "metadata": {
       "title": "# Publication Chatbot Rag Project"
+    }
+  },
+  "https-github-com-abdi7d-multi-agent-research-report": {
+    "repo_url": "https://github.com/abdi7d/Multi-agent-Research-Report",
+    "metadata": {
+      "title": "# Multi-Agent System Langgraph Llm Project"
     }
   }
 }

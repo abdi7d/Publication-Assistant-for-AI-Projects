@@ -51,7 +51,7 @@ All agents are coordinated using a **LangGraph StateGraph**, ensuring clean, rep
 
 ### 🔁 Orchestration Flow (LangGraph)
 ```mermaid
-graph LR
+graph TD
     A["🔍 Repo Analysis"] --> B["🏷️ Metadata Recommendation"]
     B --> C["✍️ Content Improvement (RAG + Web Search)"]
     C --> D["🧐 Review & Critique"]
