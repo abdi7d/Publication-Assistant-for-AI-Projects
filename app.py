@@ -270,8 +270,8 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
                 with gr.TabItem("🚀 Generation"):
                     gr.Markdown("#### 🎯 Generation Goal")
                     goal_input = gr.Textbox(
-                        placeholder="e.g. Focus on the architecture and the 'Fake Information Replacement' module.",
-                        # placeholder="e.g. Write an article about this project and make sure to mention the fake information replacement module.",
+                        # placeholder="e.g. Focus on the architecture and the 'Fake Information Replacement' module.",
+                        placeholder="e.g. Write an article about this project and make sure to mention the fake information replacement module.",
                         lines=3, show_label=False
                     )
 
