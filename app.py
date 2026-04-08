@@ -1,3 +1,14 @@
+from tools.arxiv_scholar import ArxivScholarTool
+from tools.rag_retriever import RAGRetriever
+from tools.keyword_extractor import KeywordExtractor
+from tools.web_search import WebSearchTool
+from tools.repo_parser import RepoParser
+from agents.fact_checker import FactCheckerAgent
+from agents.reviewer_critic import ReviewerCriticAgent
+from agents.content_improver import ContentImproverAgent
+from agents.metadata_recommender import MetadataRecommenderAgent
+from agents.repo_analyzer import RepoAnalyzerAgent
+from orchestration.graph import Orchestrator
 import gradio as gr
 import logging
 import os
@@ -6,23 +17,13 @@ import json
 import re
 from pathlib import Path
 from dotenv import load_dotenv
+load_dotenv()
 
 # --- Core Component Imports ---
-from orchestration.graph import Orchestrator
-from agents.repo_analyzer import RepoAnalyzerAgent
-from agents.metadata_recommender import MetadataRecommenderAgent
-from agents.content_improver import ContentImproverAgent
-from agents.reviewer_critic import ReviewerCriticAgent
-from agents.fact_checker import FactCheckerAgent
 
-from tools.repo_parser import RepoParser
-from tools.web_search import WebSearchTool
-from tools.keyword_extractor import KeywordExtractor
-from tools.rag_retriever import RAGRetriever
-from tools.arxiv_scholar import ArxivScholarTool
 
 # --- Setup ---
-load_dotenv()
+# Empty line here to maintain spacing
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,17 @@ def delete_project(project_id: str):
             json.dump(projects, f, indent=2)
     return list(projects.keys())
 
+
+def render_tags_as_html(tags: list) -> str:
+    """Renders a list of tags as interactive-looking HTML pill badges."""
+    colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"]
+    html = '<div style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;">'
+    for i, tag in enumerate(tags[:10]):
+        color = colors[i % len(colors)]
+        html += f'<span style="background-color: {color}22; color: {color}; border: 1px solid {color}44; border-radius: 16px; padding: 4px 12px; font-size: 14px; font-weight: 500; font-family: sans-serif;">{tag}</span>'
+    html += '</div>'
+    return html
+
 # --- Logic Functions ---
 
 
@@ -95,15 +107,16 @@ def validate_repo_logic(repo_url):
             return f"❌ Validation Error: {str(e)}", ""
 
 
-def generate_full_article(repo_url, style, length, model, goal, project_desc):
+def generate_full_article(repo_url, style, length, model, goal, project_desc, provider=None):
     """The main generation pipeline triggered by the 'Generate' button."""
     if not repo_url:
         return "Error", "Error", "Please provide a URL", "The URL is missing."
 
     try:
         # Instantiate Tools & Agents
-        parser, kw, rag, web, scholar = RepoParser(), KeywordExtractor(
-        ), RAGRetriever(), WebSearchTool(), ArxivScholarTool()
+        parser, kw, rag = RepoParser(), KeywordExtractor(), RAGRetriever()
+        web = WebSearchTool(selected_model=model, provider=provider)
+        scholar = ArxivScholarTool()
         agents = {
             "repo_analyzer": RepoAnalyzerAgent(repo_url, parser),
             "metadata_recommender": MetadataRecommenderAgent(kw),
@@ -114,7 +127,7 @@ def generate_full_article(repo_url, style, length, model, goal, project_desc):
 
         # Run Pipeline
         orch = Orchestrator()
-        result = orch.run_pipeline(agents, repo_url)
+        result = orch.run_pipeline(agents, repo_url, style=style, goal=goal)
 
         analysis = result.get("analysis")
         metadata = result.get("metadata")
@@ -125,32 +138,39 @@ def generate_full_article(repo_url, style, length, model, goal, project_desc):
         subtitle = getattr(metadata, 'short_description',
                            project_desc or "Analysis Result")
         tags = getattr(metadata, 'tags', ["AI", "Research"])
-        # Use simple, theme-friendly tag rendering (no CSS)
-        tags_md = " • ".join(tags[:6])
 
-        body = f"## Introduction\n{subtitle}\n\n### Improved README Content\n"
-        body += getattr(content_impr, 'improved_readme',
-                        "No improvements generated.")
+        # Render tags as HTML pill badges (only once, at the top)
+        tags_html = render_tags_as_html(tags)
 
-        # Simple expansion to target length
-        length_map = {"Short": 500, "Medium": 1000, "Long": 2000}
-        target = length_map.get(length, 1000)
+        # Build structured body: only one title, add 'Project Tags' subtitle above tags, and ensure tags are not repeated in the body
+        # Compose output: title, 'Project Tags' subtitle, tags, then cleaned body
+        out_title = f"# {title}"
+        out_tags = '<div style="margin-top: 10px; margin-bottom: 2px; font-weight: bold; font-size: 18px;">Project Tags</div>' + tags_html
+        improved_readme = getattr(
+            content_impr, 'improved_readme', "No improvements generated.")
 
-        def count_words(s):
-            return len(s.split())
+        # Remove any top-level title and tags section from improved_readme
+        import re
+        lines = improved_readme.splitlines()
+        cleaned_lines = []
+        skip = True
+        for i, line in enumerate(lines):
+            # Skip initial title (lines starting with # or ## at the very top)
+            if skip and (re.match(r'^\s*#{1,3} ', line) or re.match(r'^\s*Project Tags', line, re.IGNORECASE) or re.match(r'^\s*<div.*?>.*?</div>', line)):
+                continue
+            # Skip badge/tag lines (HTML or markdown) immediately after title
+            if skip and (re.match(r'^\s*<span|^\s*<div|^\s*#\w+', line)):
+                continue
+            # Once we hit a non-title/tag line, stop skipping
+            if skip and line.strip() and not (re.match(r'^\s*#{1,3} ', line) or re.match(r'^\s*Project Tags', line, re.IGNORECASE) or re.match(r'^\s*<div.*?>.*?</div>', line) or re.match(r'^\s*<span|^\s*#\w+', line)):
+                skip = False
+            if not skip:
+                cleaned_lines.append(line)
+        body = '\n'.join(cleaned_lines).lstrip(
+            '\n') or "No improvements generated."
 
-        current_body = body
-        idx = 0
-        extras = [
-            "\nThe system leverages a multi-agent orchestration pattern to ensure high-quality outputs.",
-            "\nTool-augmented reasoning allows the agents to fetch real-time data and academic insights.",
-            "\nThis modular approach makes the system highly extensible for different types of technical documentation."
-        ]
-        while count_words(current_body) < target and idx < 100:
-            current_body += "\n" + extras[idx % len(extras)]
-            idx += 1
-
-        return f"# {title}", f"### {subtitle}", tags_md, current_body
+        # Only return one title, then tags, then body (no subtitle)
+        return out_title, "", out_tags, body
 
     except Exception as e:
         logger.exception("Generation failed")
@@ -178,8 +198,14 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
 
             gr.Markdown("### 🤖 AI Model")
             model_input = gr.Dropdown(
-                ["Gemini 1.5 Flash", "Gemini 1.5 Pro", "GPT-4o"],
-                value="Gemini 1.5 Flash", label="Choose LLM"
+                [
+                    "Gemini 1.5 Flash Latest (Google)",
+                    "Gemini 1.0 Pro (Google)",
+                    "Groq Llama-3.1-8B-Instant (Groq)",
+                    "Groq Mixtral-8x7B-32768 (Groq)",
+                    "Heuristic Fallback (No LLM)"
+                ],
+                value="Gemini 1.5 Flash Latest (Google)", label="Choose LLM"
             )
 
         # --- RIGHT MAIN PANEL ---
@@ -256,7 +282,7 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
                         gr.Markdown("---")
                         out_title = gr.Markdown()
                         out_sub = gr.Markdown()
-                        out_tags = gr.Markdown()  # Render tags as simple Markdown
+                        out_tags = gr.HTML()  # Changed to HTML for pill badges
                         out_body = gr.Markdown()
 
     # --- Event Handling ---
@@ -274,6 +300,17 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
                        repo_url_input, proj_mode, existing_proj_dropdown], outputs=[val_msg, tree_viewer])
 
     def on_generate(url, style, length, model, goal, desc, mode, existing_sel, new_id):
+        # Map UI model selection to provider/model
+        model_map = {
+            "Gemini 1.5 Flash Latest (Google)": ("google", "gemini-1.5-flash-latest"),
+            "Gemini 1.0 Pro (Google)": ("google", "gemini-1.0-pro"),
+            "Groq Llama-3.1-8B-Instant (Groq)": ("groq", "llama-3.1-8b-instant"),
+            "Groq Mixtral-8x7B-32768 (Groq)": ("groq", "mixtral-8x7b-32768"),
+            "Heuristic Fallback (No LLM)": ("none", "heuristic")
+        }
+        provider, model_id = model_map.get(
+            model, ("google", "gemini-1.5-flash-latest"))
+
         # Resolve repo URL depending on project mode
         projects = load_projects()
         final_url = url
@@ -302,7 +339,7 @@ with gr.Blocks(theme=gr.themes.Soft()) as demo:
             project_id_to_save = new_id.strip() if new_id and new_id.strip() else slugify(final_url)
 
         title, sub, tags, body = generate_full_article(
-            final_url, style, length, model, goal, desc)
+            final_url, style, length, model_id, goal, desc, provider)
 
         # If we created a new project, persist it
         if mode != "Use Existing Project" and project_id_to_save:

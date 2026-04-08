@@ -1,6 +1,7 @@
 # agents/metadata_recommender.py
 from dataclasses import dataclass
 from typing import List, Dict
+import os
 from tools.keyword_extractor import KeywordExtractor
 import logging
 try:
@@ -27,9 +28,10 @@ class MetadataRecommenderAgent:
         self.keyword_extractor = keyword_extractor
         # lazy model: only create if genai is available
         self.model = None
-        if genai is not None:
+        api_key = os.getenv("GOOGLE_API_KEY")
+        if genai is not None and api_key:
             try:
-                self.model = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+                self.model = genai.Client(api_key=api_key)
             except Exception:
                 self.model = None
 
@@ -58,15 +60,15 @@ class MetadataRecommenderAgent:
             return [f"{base} Tool", f"Advanced {base}", f"{base} Implementation"]
 
         prompt = f"""
-        Generate 3 catchy, professional titles for an AI/Software project based on these keywords and snippet.
+        Generate 3 catchy, professional, and emoji-enhanced titles for an AI/Software project based on these keywords and snippet.
         Keywords: {", ".join(keywords[:5])}
         Snippet: {readme[:500]}
         
-        Return commas separated list.
+        Return a comma-separated list. Each title should ideally include a relevant emoji.
         """
         try:
             response = self.model.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-flash-latest",
                 contents=prompt
             )
             return [t.strip() for t in response.text.split(",") if t.strip()]
@@ -79,13 +81,14 @@ class MetadataRecommenderAgent:
             return f"A software project demonstrating {', '.join(keywords[:3])}."
 
         prompt = f"""
-        Write a one-sentence, high-impact description (max 200 chars) for this project.
+        Write a one-sentence, high-impact, and emoji-rich description (max 200 chars) for this project.
         Keywords: {", ".join(keywords[:5])}
         Readme start: {readme[:500]}
+        Use at least one relevant emoji in the description.
         """
         try:
             response = self.model.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-flash-latest",
                 contents=prompt
             )
             desc = response.text.replace("\n", " ").strip()

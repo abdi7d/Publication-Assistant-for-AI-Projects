@@ -23,8 +23,8 @@ class ContentImproverAgent:
         self.web_search = web_search
         self.rag = rag
 
-    def run(self, readme: str, metadata: Dict[str, Any]) -> ContentImprovement:
-        logger.info("ContentImproverAgent: generating improved content")
+    def run(self, readme: str, metadata: Dict[str, Any], style: str = "Technical Blog", goal: str = "") -> ContentImprovement:
+        logger.info(f"ContentImproverAgent: generating improved content (Style: {style}, Goal: {goal})")
 
         # 1. Get similar repo examples
         examples = self.web_search.search_similar_repos(readme, top_k=3)
@@ -37,7 +37,7 @@ class ContentImproverAgent:
         context_readme = readme + \
             "\n\n<!-- BEST PRACTICES SUGGESTIONS -->\n" + "\n".join(rag_hints)
         improved = self.web_search.summarize_and_improve(
-            context_readme, examples)
+            context_readme, examples, style=style, goal=goal)
 
         # 4. Suggest images
         suggestions = {

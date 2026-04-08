@@ -12,9 +12,9 @@ class Orchestrator:
         logger.info("Initializing Orchestrator with LangGraph")
         self.bus = bus
 
-    def run_pipeline(self, agents: Dict[str, Any], repo_source: str):
+    def run_pipeline(self, agents: Dict[str, Any], repo_source: str, style: str = "Technical Blog", goal: str = ""):
         """Run pipeline using LangGraph."""
-        logger.info("Orchestrator: executing pipeline")
+        logger.info(f"Orchestrator: executing pipeline (Style: {style}, Goal: {goal})")
 
         workflow = StateGraph(dict)
 
@@ -35,8 +35,11 @@ class Orchestrator:
             if repo_analysis is None:
                 logger.error("repo_analysis missing in improve_content")
             metadata = state.get("metadata")
+            # style and goal are already in state from inputs
+            style_val = state.get("style", "Technical Blog")
+            goal_val = state.get("goal", "")
             content_improvement = agents["content_improver"].run(
-                repo_analysis.readme, metadata)
+                repo_analysis.readme, metadata, style=style_val, goal=goal_val)
             return {**state, "content_improvement": content_improvement}
 
         def review_content(state):
@@ -66,7 +69,11 @@ class Orchestrator:
         workflow.add_edge("fact_check", END)
 
         compiled = workflow.compile()
-        inputs = {"repo_source": repo_source}
+        inputs = {
+            "repo_source": repo_source,
+            "style": style,
+            "goal": goal
+        }
         result = compiled.invoke(inputs)
 
         return {

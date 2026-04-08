@@ -9,30 +9,30 @@ from tools import RepoParser, KeywordExtractor, WebSearchTool, RAGRetriever, Arx
 import argparse
 from agents import RepoAnalyzerAgent, MetadataRecommenderAgent, ContentImproverAgent, ReviewerCriticAgent, FactCheckerAgent
 from orchestration import Orchestrator
-from utils.mcp import MCPBus
 import os
 import logging
+from dotenv import load_dotenv
 from utils.logging import configure_logging
 
+load_dotenv()
 configure_logging()
 logger = logging.getLogger(__name__)
 
 
 def build_agents(repo_source: str):
-    bus = MCPBus()
     repo_parser = RepoParser()
     repo_analyzer = RepoAnalyzerAgent(
-        repo_source=repo_source, repo_parser=repo_parser, bus=bus)
+        repo_source=repo_source, repo_parser=repo_parser)
     keyword_extractor = KeywordExtractor()
     metadata_recommender = MetadataRecommenderAgent(
-        keyword_extractor=keyword_extractor, bus=bus)
+        keyword_extractor=keyword_extractor)
     web_search = WebSearchTool()
     rag_retriever = RAGRetriever()
     content_improver = ContentImproverAgent(
-        web_search=web_search, rag=rag_retriever, bus=bus)
-    reviewer = ReviewerCriticAgent(bus=bus)
+        web_search=web_search, rag=rag_retriever)
+    reviewer = ReviewerCriticAgent()
     scholar = ArxivScholarTool()
-    fact_checker = FactCheckerAgent(scholar_tool=scholar, bus=bus)
+    fact_checker = FactCheckerAgent(scholar_tool=scholar)
     agents = {
         "repo_analyzer": repo_analyzer,
         "metadata_recommender": metadata_recommender,
@@ -40,7 +40,7 @@ def build_agents(repo_source: str):
         "reviewer_critic": reviewer,
         "fact_checker": fact_checker
     }
-    return agents, bus
+    return agents
 
 
 def main():
@@ -49,8 +49,8 @@ def main():
                         help="Path to repository directory or zip file")
     args = parser.parse_args()
     repo_path = args.repo_path
-    agents, bus = build_agents(repo_path)
-    orchestrator = Orchestrator(bus=bus)
+    agents = build_agents(repo_path)
+    orchestrator = Orchestrator()
     result = orchestrator.run_pipeline(agents=agents, repo_source=repo_path)
     # Print a concise report
     print("=== Publication Assistant Report ===")

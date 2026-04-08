@@ -90,7 +90,7 @@ This project integrates **five tools**, including both built-in and custom imple
 | ----------------------------------------- | ----------------------------------------------- |
 | **RepoParser**                            | Reads local, ZIP, or remote GitHub repositories |
 | **KeywordExtractor (Gemini / Heuristic)** | Extracts technical keywords                     |
-| **TavilySearchTool**                      | Finds similar successful repositories           |
+| **WebSearchTool (DuckDuckGo)**            | Finds similar successful repositories           |
 | **RAGRetriever (ChromaDB)**               | Retrieves best-practice documentation hints     |
 | **ArxivScholarTool**                      | Verifies scientific and technical claims        |
 | **MCPBus (Optional)**                     | Lightweight pub/sub communication layer         |
@@ -160,8 +160,6 @@ Create a `.env` file:
 
 ```env
 GOOGLE_API_KEY=your_google_api_key
-GROQ_API_KEY=your_groq_api_key
-TAVILY_API_KEY=your_tavily_api_key
 ```
 
 (Optional tools will still work without this.)

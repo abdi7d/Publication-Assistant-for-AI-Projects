@@ -29,8 +29,8 @@ def main():
     tmp = tempfile.mkdtemp(prefix="pubassist_")
     try:
         create_sample_repo(tmp)
-        agents, bus = build_agents(tmp)
-        orchestrator = Orchestrator(bus)
+        agents = build_agents(tmp)
+        orchestrator = Orchestrator()
         result = orchestrator.run_pipeline(agents, tmp)
 
         print("=== Example Run Result Summary ===")

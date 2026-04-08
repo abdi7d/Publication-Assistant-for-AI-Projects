@@ -42,7 +42,7 @@ class KeywordExtractor:
             """
             try:
                 response = self.model.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-flash-latest",
                     contents=prompt
                 )
                 keywords = [k.strip() for k in response.text.split(",") if k.strip()]

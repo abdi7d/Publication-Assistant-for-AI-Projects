@@ -20,7 +20,7 @@ class RAGRetriever:
     def __init__(self, db_path: str = "./chroma_db"):
         self.client = None
         self.collection = None
-        self.embed_model = 'models/embedding-001'
+        self.embed_model = 'models/gemini-embedding-001'
         
         # Ensure we have dependencies
         if chromadb is None:
