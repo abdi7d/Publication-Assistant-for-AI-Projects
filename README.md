@@ -1,55 +1,44 @@
-# 📝 Publication Assistant for AI Projects
-
-<img src="assets/image.png" alt=" Publication Assistant for AI Projects" >
-
-**A Multi-Agent System for Improving the Quality, Discoverability, and Credibility of AI/ML Repositories**
+<div align="center">
+  <img src="assets/image.png" alt="Publication Assistant for AI Projects" width="100%">
+  <br/>
+  <h1>🚀 Publication Assistant for AI Projects</h1>
+</div>
 
 ---
 
-## 📌 Overview
+## Project Summary
+A Multi-Agent System for Improving the Quality, Discoverability, and Credibility of AI/ML Repositories.
 
+## Project Overview
 **Publication Assistant for AI Projects** is an advanced **multi-agent AI system** that analyzes a GitHub repository and automatically generates **high-quality publication improvements**, including:
-
 * A clearer, more engaging README
 * Better project titles and metadata
 * Discoverability improvements (tags, keywords)
 * Structural and documentation recommendations
 * Automated fact-checking of technical claims
 
-The system is built using **LangGraph orchestration**, integrates **multiple specialized agents**, and leverages **tool-augmented reasoning** to go far beyond basic LLM text generation.
+The system is built using **LangGraph orchestration**, integrates **multiple specialized agents**, and leverages **tool-augmented reasoning** to go far beyond basic LLM text generation. This project was developed as part of the **Mastering AI Agents** program and demonstrates real-world, production-style agent collaboration.
 
-This project was developed as part of the **Mastering AI Agents** program and demonstrates real-world, production-style agent collaboration.
-
----
-
-## 🎯 Project Objectives
-
-This project demonstrates mastery of the following core AI-agent concepts:
+## Project Description
+This project demonstrates mastery of core AI-agent concepts. Here's a breakdown of the design and architecture:
 
 ### ✅ Multi-Agent Collaboration
-
 * Multiple agents with **distinct responsibilities**
 * Clear handoff of state and artifacts between agents
 * Coordinated execution through a shared orchestration graph
 
 ### ✅ Agent Orchestration
-
 * Workflow implemented using **LangGraph**
 * Deterministic execution order with shared state
 * Modular, extensible pipeline design
 
 ### ✅ Tool Integration
-
 * Each agent is **tool-augmented**
 * Tools extend agent capabilities beyond text generation
 * Graceful fallbacks when optional tools are unavailable
 
----
-
-## 🧠 System Architecture
-
+### 🧠 System Architecture
 The system is composed of **five core agents**, each with a focused role:
-
 | Agent                        | Responsibility                                           |
 | ---------------------------- | -------------------------------------------------------- |
 | **RepoAnalyzerAgent**        | Parses repository structure, README, and code statistics |
@@ -60,32 +49,26 @@ The system is composed of **five core agents**, each with a focused role:
 
 All agents are coordinated using a **LangGraph StateGraph**, ensuring clean, reproducible execution.
 
----
+### 🔁 Orchestration Flow (LangGraph)
+```mermaid
+graph TD
+    A["🔍 Repo Analysis"] --> B["🏷️ Metadata Recommendation"]
+    B --> C["✍️ Content Improvement (RAG + Web Search)"]
+    C --> D["🧐 Review & Critique"]
+    D --> E["📚 Fact Checking"]
+    E --> F["✅ Final Report"]
 
-## 🔁 Orchestration Flow (LangGraph)
-
+    style A fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    style B fill:#fff3e0,stroke:#f57c00,stroke-width:2px;
+    style C fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+    style D fill:#fce4ec,stroke:#c2185b,stroke-width:2px;
+    style E fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    style F fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px;
 ```
-Repo Analysis
-      ↓
-Metadata Recommendation
-      ↓
-Content Improvement (RAG + Web Search)
-      ↓
-Review & Critique
-      ↓
-Fact Checking
-      ↓
-Final Report
-```
-
 Each step enriches the shared state and passes structured outputs to the next agent.
 
----
-
-## 🛠️ Tools Used
-
+### 🛠️ Tools Used
 This project integrates **five tools**, including both built-in and custom implementations:
-
 | Tool                                      | Purpose                                         |
 | ----------------------------------------- | ----------------------------------------------- |
 | **RepoParser**                            | Reads local, ZIP, or remote GitHub repositories |
@@ -97,10 +80,7 @@ This project integrates **five tools**, including both built-in and custom imple
 
 All tools are optional-dependency-safe and fail gracefully.
 
----
-
-## 💡 Key Features
-
+### 💡 Key Features
 * 🔍 Automatic repository inspection (local, ZIP, or GitHub URL)
 * ✍️ README rewriting using **RAG + Web Search**
 * 🏷️ Intelligent metadata generation (titles, tags, descriptions)
@@ -109,96 +89,17 @@ All tools are optional-dependency-safe and fail gracefully.
 * 🧩 Modular and extensible agent design
 * 🖥️ CLI and **Gradio Web UI** support
 
----
+## Tech Stack / Technologies Used
+* **Languages**: Python 3.11+
+* **Orchestration / LLM Framework**: LangGraph, LangChain
+* **LLM Providers**: Groq (Llama-3, Mixtral), Google GenAI (Gemini)
+* **Web UI Framework**: Gradio
+* **Vector Database (RAG)**: ChromaDB
+* **Web Search Integration**: Tavily Python Client
+* **Scientific Verification**: ArXiv API
 
-## 🧪 Example Output
-
-* **Suggested Titles**
-
-  * *Publication Assistant for AI Projects*
-  * *Multi-Agent Documentation Improver*
-  * *AI-Powered GitHub Readme Optimizer*
-
-* **Suggested Tags**
-
-  ```
-  multi-agent, langgraph, rag, ai-agents, documentation, llm-tools
-  ```
-
-* **Review Score**
-
-  ```
-  8.5 / 10
-  ```
-
-* **Missing Sections**
-
-  ```
-  Installation, Examples, Contributing
-  ```
-
----
-
-## 🚀 Getting Started
-
-#### 1️⃣ Clone the Repository
-
-```bash
-git clone https://github.com/your-username/publication-assistant.git
-cd publication-assistant
-```
-
-#### 2️⃣ Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-#### 3️⃣ Set Environment Variables
-
-Create a `.env` file:
-
-```env
-GOOGLE_API_KEY=your_google_api_key
-GROQ_API_KEY=your_groq_api_key
-TAVILY_API_KEY=your_tavily_api_key
-```
-
-(Optional tools will still work without this.)
-
----
-
-## ▶️ Run from CLI
-
-```bash
-python main.py --repo-path ./some_repo
-```
-
-Or analyze a remote repository:
-
-```bash
-python main.py --repo-path https://github.com/user/project
-```
-
----
-
-## 🌐 Run the Web Interface (Gradio)
-
-```bash
-python app.py
-```
-
-Then open your browser at:
-
-```
-http://localhost:7860
-```
-
----
-
-## 🧩 Project Structure
-
-```
+## Repository Structure
+```text
 Publication Assistant/
 ├── agents/
 │   ├── __init__.py
@@ -237,10 +138,75 @@ Publication Assistant/
 └── requirements.txt
 ```
 
+## 🚀 Getting Started
+
+### 📋 Prerequisites
+Before you begin, make sure you have the following:
+* ✅ Python 3.11+
+* 🔑 Groq API Key (required)
+* 🔑 Google API Key (optional)
+* 🔑 Tavily API Key (optional, for web search capabilities)
+
+### 🛠️ Setup and Installation Guide
+
+#### 1️⃣ Clone the Repository
+```bash
+git clone https://github.com/your-username/publication-assistant.git
+cd publication-assistant
+```
+
+#### 2️⃣ Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+#### 3️⃣ Set Environment Variables
+Create a `.env` file:
+```env
+GOOGLE_API_KEY=your_google_api_key
+GROQ_API_KEY=your_groq_api_key
+TAVILY_API_KEY=your_tavily_api_key
+```
+*(Optional tools will still work without this.)*
+
+---
+
+## 📖 Usage Instructions
+
+Once the application is installed, you can use it via the interactive web UI or the command line.
+
+### 🌐 1. Web Interface (Gradio) - Recommended
+The web interface provides the richest experience for exploring the generated documentation.
+
+**To start the server:**
+```bash
+python app.py
+```
+**How to use:**
+1. Open your browser and navigate to `http://localhost:7860`.
+2. **Project Setup:** Paste a public GitHub Repository URL into the input field and click "Validate".
+3. **Configuration:** On the left panel, select your preferred "Writing Style" (e.g., Technical Blog) and "AI Model".
+4. **Generation:** Click "Generate Article". The system will trigger the multi-agent pipeline and present the improved README, tags, and titles on the right.
+
+---
+
+### ▶️ 2. Command Line Interface (CLI)
+You can directly parse local or remote repositories from your terminal for quick analysis.
+
+**Analyze a local repository:**
+```bash
+python main.py --repo-path ./some_local_repo
+```
+
+**Analyze a remote repository:**
+```bash
+python main.py --repo-path https://github.com/user/project
+```
+*The CLI will output a concise report in your terminal containing suggested titles, tags, review scores, and missing sections.*
+
 ---
 
 ## 🧠 Design Principles
-
 * **Separation of Concerns** – each agent has a single responsibility
 * **Tool-Augmented Intelligence** – agents do not rely on LLMs alone
 * **Fault Tolerance** – optional tools fail gracefully
@@ -249,7 +215,6 @@ Publication Assistant/
 ---
 
 ## 🔮 Future Enhancements
-
 * Formal evaluation metrics against baseline READMEs
 * Multi-repo batch analysis
 * GitHub Actions integration
@@ -259,24 +224,26 @@ Publication Assistant/
 ---
 
 ## 🤝 Contributing
-
 Contributions are welcome!
 Please open an issue or submit a pull request with clear documentation.
 
 ---
-### 📜 License
 
+### 📜 License
 Licensed under the [MIT license](LICENSE).
 
 ---
 
 ### 📚 References
-
 1. **Ready Tensor** – [Agentic AI Developer Certification](https://app.readytensor.ai/certifications)
+2. **LangGraph Framework** – [Official Documentation](https://langchain-ai.github.io/langgraph/)
+3. **LangChain** – [Building context-aware reasoning applications](https://python.langchain.com/)
+4. **Gradio** – [The fastest way to build & share ML apps](https://www.gradio.app/)
+5. **ChromaDB** – [Open-source AI-native embedding database](https://www.trychroma.com/)
+6. **Tavily Search** – [Search Engine Optimized for LLMs](https://tavily.com/)
+7. **ArXiv API** – [Scholarly Research API](https://info.arxiv.org/help/api/index.html)
 
 ---
 
 ### 📬 Contact
-
 📧 [abdid.yadata@gmail.com](mailto:abdid.yadata@gmail.com)
-
