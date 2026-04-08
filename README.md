@@ -87,7 +87,23 @@ All tools are optional-dependency-safe and fail gracefully.
 * 📊 Documentation quality scoring
 * 📚 Claim verification using academic sources
 * 🧩 Modular and extensible agent design
-* 🖥️ CLI and **Gradio Web UI** support
+* 🖥️ CLI and **Gradio App** support
+
+---
+
+### 📸 Demos & Screenshots
+
+**Interactive Gradio UI (Screenshots):**
+<p align="center">
+  <img src="assets/screenshot1.png" alt="Gradio UI Demo 1" width="32%">
+  <img src="assets/screenshot2.png" alt="Gradio UI Demo 2" width="32%">
+  <img src="assets/screenshot3.png" alt="Gradio UI Demo 3" width="32%">
+</p>
+
+**Video Walkthrough:**
+🎥 [Watch the Video Demo on YouTube/Loom](https://your-video-link-here.com)
+
+---
 
 ## Tech Stack / Technologies Used
 * **Languages**: Python 3.11+
@@ -173,10 +189,10 @@ TAVILY_API_KEY=your_tavily_api_key
 
 ## 📖 Usage Instructions
 
-Once the application is installed, you can use it via the interactive web UI or the command line.
+Once the application is installed, you can use it via the interactive Gradio app or the command line.
 
-### 🌐 1. Web Interface (Gradio) - Recommended
-The web interface provides the richest experience for exploring the generated documentation.
+### 🌐 1. Gradio App - Recommended
+The Gradio app provides the richest experience for exploring the generated documentation.
 
 **To start the server:**
 ```bash
