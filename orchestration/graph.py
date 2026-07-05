@@ -1,11 +1,12 @@
 # orchestration/graph.py
+from langgraph.graph import StateGraph, END  # type: ignore
 import logging
 from typing import Any, Dict
 
+from utils.evaluation import evaluate_recommendations
+
 logger = logging.getLogger(__name__)
 
-
-from langgraph.graph import StateGraph, END  # type: ignore
 
 class Orchestrator:
     def __init__(self, bus: Any = None):
@@ -14,7 +15,8 @@ class Orchestrator:
 
     def run_pipeline(self, agents: Dict[str, Any], repo_source: str, style: str = "Technical Blog", goal: str = ""):
         """Run pipeline using LangGraph."""
-        logger.info(f"Orchestrator: executing pipeline (Style: {style}, Goal: {goal})")
+        logger.info(
+            f"Orchestrator: executing pipeline (Style: {style}, Goal: {goal})")
 
         workflow = StateGraph(dict)
 
@@ -76,10 +78,19 @@ class Orchestrator:
         }
         result = compiled.invoke(inputs)
 
+        metadata = result.get("metadata")
+        evaluation = evaluate_recommendations(metadata) if metadata is not None else {
+            "tag_count": 0,
+            "title_count": 0,
+            "has_description": 0.0,
+            "mock_score": 0.0,
+        }
+
         return {
             "analysis": result.get("repo_analysis"),
-            "metadata": result.get("metadata"),
+            "metadata": metadata,
             "content_improvement": result.get("content_improvement"),
             "review": result.get("review"),
-            "fact_check": result.get("fact_check")
+            "fact_check": result.get("fact_check"),
+            "evaluation": evaluation,
         }

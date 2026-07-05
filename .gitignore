@@ -1,57 +1,42 @@
-# Python
+# Python cache and bytecode
 __pycache__/
 *.py[cod]
 *.pyc
 *.pyo
 *.pyd
+venv/
 
-# Environment
+# Environment files
 .env
 *.env
 
 # Logs and databases
 *.log
 chroma_db/
+.chromadb/
+.pytest_cache/
 
 # IDEs
 .vscode/
 .idea/
 
+# Gradio
+.gradio/
+
 # OS files
 .DS_Store
 Thumbs.db
 
-# Docker
-*.dockerignore
-
-# Misc
+# Scripts and temporary files
 *.swp
 *.bak
 *.tmp
+.scripts/
+.demo_sample_repo/
+
+# Publication Assistant for AI Projects
+.publication_article/
+publication_article.md
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-venv/
-.env
-
-# Pytest cache
-.pytest_cache/
-
-# ChromaDB storage (if created)
-.chromadb/
+projects.json

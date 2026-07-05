@@ -124,101 +124,264 @@ class WebSearchTool:
                 [f"Example ({e['title']}): {e['snippet']}" for e in examples if isinstance(e, dict)])
 
         prompt = f"""
-        You are an expert developer advocate and technical writer. 
-        Your task is to transform a GitHub repository README into a beautiful, highly engaging, and interactive-style project showcase.
+        You are an expert AI Developer Advocate, Technical Writer, and Open Source Documentation Specialist.
 
-        Writing Style: {style}
-        User's Specific Focus/Goal: {goal if goal else "General repository improvement"}
+        Your task is to transform the provided GitHub repository into a publication-ready, highly engaging, technically accurate README.
 
-        Current README content:
+        Writing Style:
+        {style}
+
+        User Goal:
+        {goal if goal else "Improve the repository for public sharing, discoverability, and technical clarity."}
+
+        Repository README:
         {readme[:4000]}
 
-        Relevant search results for similar successful projects:
+        Relevant examples and external references:
         {example_text}
 
-        PROJECT REQUIREMENTS:
-        - Recommend a better project title or summary (but do NOT output a title at the top; just improve the content)
-        - Suggest relevant tags or categories (but do NOT output tags or badges; just improve the content)
-        - Identify missing sections or unclear parts of the README and add them
-        - Propose visual or structural enhancements (e.g., diagrams, layout, code blocks, tables)
-        - Make the README more discoverable, clear, and complete
-        - Collaborate as if you are part of a multi-agent system (Repo Analyzer, Metadata Recommender, Content Improver, Reviewer/Critic, Fact-Checker)
-        - Use tool-augmented reasoning (web search, RAG, keyword extraction, etc.)
+        OBJECTIVE
 
-        STRICT CONSTRAINTS:
+        Analyze the repository and generate an improved README that accurately represents the project.
+
+        Do NOT use generic templates.
+
+        Instead, infer the repository's purpose, architecture, workflow, users, technologies, and strengths from the provided repository information.
+
+        Every recommendation must be grounded in available repository evidence. If information cannot be confirmed, clearly indicate uncertainty rather than inventing details.
+
+        CONTENT REQUIREMENTS
+
+        Your generated README should include appropriate sections based on the repository.
+
+        Possible sections include (only include when relevant):
+        - Project Title
+        - Short Project Summary
+        - Overview
+        - Why This Project Matters
+        - Problem Statement
+        - Key Features
+        - Repository Highlights
+        - Architecture
+        - System Workflow
+        - Project Structure
+        - Installation
+        - Requirements
+        - Quick Start
+        - Usage Examples
+        - Configuration
+        - Technologies Used
+        - Model(s)
+        - Dataset Information
+        - API Reference
+        - Evaluation
+        - Results
+        - Benchmarks
+        - Performance
+        - Screenshots Placeholders
+        - Examples
+        - Testing
+        - Deployment
+        - Contributing
+        - Roadmap
+        - FAQ
+        - License
+        - Citation
+        - Acknowledgements
+
+        Choose sections dynamically.
+
+        Never include irrelevant sections.
+
+        ESSENTIAL README ELEMENTS
+
+        Whenever relevant, include the following repository-specific details:
+        - a clear project name and one-line value proposition
+        - the problem the project solves
+        - the core solution or approach
+        - how the system works or is used
+        - prerequisites and installation steps
+        - quick-start examples
+        - architecture or workflow explanation
+        - key technical components and dependencies
+        - evaluation, benchmarks, or results when available
+        - limitations, assumptions, or known issues
+        - contribution and support guidance
+        - license, citation, or acknowledgements when appropriate
+
+        For AI/ML repositories, also include relevant details about models, datasets, training strategy, evaluation metrics, and reproducibility when supported by the repository evidence.
+
+        REPOSITORY ANALYSIS
+
+        Before writing, analyze:
+        - repository purpose
+        - target users
+        - major features
+        - technologies
+        - architecture
+        - workflow
+        - installation process
+        - strengths
+        - weaknesses
+        - missing documentation
+        - missing developer information
+        - discoverability
+        - readability
+
+        Use these findings throughout the README.
+
+        DOCUMENTATION IMPROVEMENTS
+
+        Improve:
+        - clarity
+        - organization
+        - readability
+        - navigation
+        - consistency
+        - completeness
+        - developer experience
+
+        Rewrite weak sections.
+
+        Expand incomplete sections.
+
+        Keep strong existing content.
+
+        DISCOVERABILITY
+
+        Improve discoverability by naturally optimizing:
+        - repository title
+        - summary
+        - headings
+        - keywords
+        - terminology
+        - GitHub search relevance
+
+        Do NOT create a keyword list.
+
+        Instead integrate keywords naturally.
+
+        TECHNICAL ACCURACY
+
+        Never invent:
+        - features
+        - benchmarks
+        - datasets
+        - APIs
+        - models
+        - integrations
+        - metrics
+        - architecture
+
+        If something appears incomplete or uncertain:
+        - explicitly state that additional repository information would be needed.
+
+        VISUAL PRESENTATION
+
+        Produce a visually engaging README.
+
+        Use:
+        - emojis for headings
+        - markdown tables
+        - checklists
+        - blockquotes
+        - collapsible sections where useful
+        - code blocks
+        - callouts
+        - horizontal rules
+
+        When appropriate, generate Mermaid diagrams for:
+        - architecture
+        - workflow
+        - pipeline
+        - component interaction
+
+        Only generate diagrams when enough information exists.
+
+        EXAMPLES
+
+        If enough information exists, generate:
+        - installation example
+        - usage example
+        - CLI example
+        - API example
+        - expected output example
+
+        Otherwise omit them.
+
+        AUDIENCE ADAPTATION
+
+        Infer the primary audience.
+
+        Examples include:
+        - AI researchers
+        - ML engineers
+        - developers
+        - students
+        - contributors
+        - end users
+
+        Adjust tone and explanations accordingly.
+
+        README QUALITY
+
+        Ensure the README is:
+        - technically accurate
+        - easy to scan
+        - beginner friendly
+        - professional
+        - publication ready
+        - visually engaging
+        - repository specific
+
+        OUTPUT RULES
+
+        Output ONLY the improved README in Markdown.
+
+        Do NOT explain your reasoning.
+
+        Do NOT mention these instructions.
+
+        Do NOT use placeholder text unless repository information is genuinely unavailable.
+
+        Do NOT produce a generic README template.
+
+        Generate documentation that feels uniquely written for this repository and fully aligned with the user's stated goal.
+        ADDITIONAL REQUIREMENTS
+
+        - Rewrite the README specifically for this repository, not as a generic template.
+        - Extract the actual project purpose, main workflow, and standout capabilities from the supplied README and repository context.
+        - Highlight project-specific details such as the problem solved, target users, core features, architecture, and expected outcomes.
+        - Recommend a better project title or summary only if it improves clarity for the repository.
+        - Suggest relevant tags or categories,
+        - Identify missing sections or unclear parts of the README and add them in a polished way.
+        - Propose visual or structural enhancements such as diagrams, tables, callouts, code blocks, and step-by-step examples.
+        - Make the README more discoverable, clear, complete, and publication-ready.
+        - Tailor the content to the most likely audience: developers, researchers, contributors, or end users.
+        - If the repository is an AI/ML or agentic project, emphasize architecture, tooling, workflows, and practical value clearly.
+        - Avoid inventing features; if something is uncertain, describe it cautiously and accurately.
+
+        STRICT CONSTRAINTS
+
         1. Use relevant emojis for EVERY header and for key feature points.
         2. Use bullet points, checklists, and callouts extensively. Avoid long paragraphs (no "passages").
         3. Include clear, attractive sections like:
             - 🌍 Introduction
             - 🎯 **Value Proposition** (Address the user's specific goal if provided)
-            - 🚀 **Quick Start** (How to get up and running in 3 steps)
+            - 🚀 **Quick Start**
             - 🛠️ **Tech Stack** (Use a bulleted list with emojis)
             - 📝 **Architecture & Structure** (Deep dive into the project's logic)
             - 🌟 **Key Features**
-            - 👥 **Who Should Use This** 
+            - 👥 **Who Should Use This**
             - ✅ **Success Criteria**
         4. Make the tone professional but high-energy and visually engaging.
         5. Use Markdown tables where appropriate for technical specs or comparisons.
         6. Use interactive elements where possible (e.g., checklists, collapsible sections, callouts, or code blocks for demos).
         7. DO NOT output a passage or essay. Output must be a visually engaging, sectioned, and interactive-ready article.
-        8. If the user specified a goal (e.g., "{goal}"), make sure that goal is prominently addressed in the text.
-
-        Output ONLY the improved README markdown, using Markdown and HTML for visual effects. DO NOT include any tags, badges, or tag sections at the top. DO NOT output any tag or badge HTML or markdown.
-        
+        8. If the user specified a goal, make sure that goal is prominently addressed in the text.
+        9. Output ONLY the improved README markdown, using Markdown and HTML for visual effects.
 
 
-## 🌍 Introduction
-
-> **Publication Assistant for AI Projects** is a **tool-augmented, multi-agent system** that **systematically upgrades how AI/ML repositories are presented for public sharing**.  
-> It performs **deep repository analysis**—covering **README, structure, code signals, and metadata**—and returns **actionable, evidence-backed recommendations** to improve:
-
-- 🔎 **Discoverability** (keywords, summaries, structure)
-- 📖 **Clarity & readability** (sections, flow, examples)
-- 🧩 **Structural completeness** (missing or weak areas)
-- 🧠 **Technical credibility** (fact-checked claims)
-
-✔️ Built for **AI developers, researchers, open-source maintainers, and agentic-system builders**  
-✔️ Designed as a **real-world reference implementation** of **multi-agent orchestration + tool integration**
-
-
-
-## 🎯 Value Proposition
-
-- ✅ Transform **weak or incomplete READMEs** into **publication-ready documentation**
-- ✅ Boost **GitHub visibility** without manual SEO work
-- ✅ Replace **single-LLM writing** with **collaborative agent reasoning**
-- ✅ Showcase **production-grade agentic architecture**
-- ✅ Serve as a **learning & evaluation benchmark** for multi-agent systems
-
-
-## 🧠 What This System Does (at a Glance)
-
-- 🗂️ **Analyzes** repository structure, README, and signals
-- 🏷️ **Recommends** better summaries, keywords, and categories
-- ✍️ **Improves** clarity, layout, and section organization
-- 🧐 **Reviews** for gaps, ambiguity, and redundancy
-- ✅ **Validates** claims using tools (web search, retrieval)
-
----
-
-## 🚫 What This System Does NOT Do
-
-- ❌ Does not auto-publish changes to your repo
-- ❌ Does not fabricate features or results
-- ❌ Does not replace human judgment (human-in-the-loop supported)
-
-
-
-## 🚀 Quick Start (3 Steps)
-
-1️⃣ **Provide a GitHub Repository URL**  
-2️⃣ **(Optional) Add a short project goal or focus**  
-3️⃣ **Receive structured, actionable improvement suggestions**
-
-```text
-Input  → GitHub Repo (+ optional context)
-Agents → Analyze • Improve • Validate • Recommend
-Output → Enhanced README + Structural Guidance
 
         """
 
