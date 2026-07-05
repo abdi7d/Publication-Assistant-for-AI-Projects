@@ -6,11 +6,7 @@
 
 ---
 
-## Project Summary
-
-A Multi-Agent System for Improving the Quality, Discoverability, and Credibility of AI/ML Repositories.
-
-## Overview
+## Project Overview
 
 **Publication Assistant for AI Projects** is an advanced **multi-agent AI system** that analyzes a GitHub repository and automatically generates **high-quality publication improvements**, including:
 
@@ -98,13 +94,13 @@ All tools are optional-dependency-safe and fail gracefully.
 
 The system is designed to improve repository presentation across several dimensions:
 
-| Metric                       | Improvement                                              |
-| ---------------------------- | -------------------------------------------------------- |
-| README completeness          | Increased through structured content suggestions         |
-| Installation clarity         | Improved with explicit setup guidance                    |
-| Project discoverability      | Strengthened via title, tag, and summary recommendations |
-| Missing section detection    | Automated via repository analysis                        |
-| Technical claim verification | Supported through arXiv-based checks                     |
+| Metric | Improvement |
+| --- | --- |
+| README completeness | Increased through structured content suggestions |
+| Installation clarity | Improved with explicit setup guidance |
+| Project discoverability | Strengthened via title, tag, and summary recommendations |
+| Missing section detection | Automated via repository analysis |
+| Technical claim verification | Supported through arXiv-based checks |
 
 > These results are based on the project’s automated workflow and qualitative review of repository documentation patterns.
 
@@ -177,7 +173,7 @@ Publication Assistant/
 └── requirements.txt
 ```
 
-## Installation
+## 🚀 Getting Started
 
 ### 📋 Prerequisites
 
@@ -217,7 +213,7 @@ _(Optional tools will still work without this.)_
 
 ---
 
-## Usage
+## 📖 Usage Instructions
 
 Once the application is installed, you can use it via the interactive Gradio app or the command line.
 
@@ -269,10 +265,6 @@ _The CLI will output a concise report in your terminal containing suggested titl
 
 ---
 
-## License
-
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
 ## 🔮 Future Enhancements
 
 - Formal evaluation metrics against baseline READMEs
@@ -291,7 +283,7 @@ Abdi Dabala. Publication Assistant for AI Projects. GitHub Repository, 2026.
 
 ---
 
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome!
 Please open an issue or submit a pull request with clear documentation.
