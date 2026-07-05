@@ -6,6 +6,11 @@
 
 ---
 
+## Project Summary
+
+A Multi-Agent System for Improving the Quality, Discoverability, and Credibility of AI/ML Repositories.
+
+
 ## Project Overview
 
 **Publication Assistant for AI Projects** is an advanced **multi-agent AI system** that analyzes a GitHub repository and automatically generates **high-quality publication improvements**, including:
